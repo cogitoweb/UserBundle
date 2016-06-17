@@ -1,0 +1,57 @@
+imports:
+    - { resource: firewall.yml }
+    - { resource: security.yml }
+
+# Cogitoweb: configuration based on https://sonata-project.org/bundles/user/master/doc/reference/installation.html tutorial
+sonata_user:
+    # Cogitoweb: disable security ACL
+#    security_acl: true
+    manager_type: orm # can be orm or mongodb
+    class:
+        user:  Cogitoweb\UserBundle\Entity\User
+        group: Cogitoweb\UserBundle\Entity\Group
+    impersonating:
+        route: sonata_admin_dashboard
+
+sonata_block:
+    blocks:
+        sonata.user.block.menu:    # used to display the menu in profile pages
+        sonata.user.block.account: # used to display menu option (login option)
+        sonata.block.service.text: # used to if you plan to use Sonata user routes
+
+fos_user:
+    db_driver:     orm # can be orm or odm
+    firewall_name: main
+    user_class:    Cogitoweb\UserBundle\Entity\User
+    group:
+        group_class:   Cogitoweb\UserBundle\Entity\Group
+        group_manager: sonata.user.orm.group_manager # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+    service:
+        user_manager:  sonata.user.orm.user_manager  # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
+
+doctrine:
+    dbal:
+        types:
+            json: Sonata\Doctrine\Types\JsonType
+
+    # Cogitoweb: doctrine auto mapping is enabled by default, therefore it is not necessary to configure default mappings
+#    orm:
+#        entity_managers:
+#            default:
+#                mappings:
+#                    ApplicationSonataUserBundle: ~
+#                    SonataUserBundle:            ~
+#                    FOSUserBundle:               ~ # If SonataUserBundle extends it
+
+# Cogitoweb: configuration based on http://symfony.com/doc/master/cookbook/doctrine/pdo_session_storage.html tutorial
+framework:
+    session:
+        handler_id: session.handler.pdo
+
+services:
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        public:    false
+        arguments:
+            - "pgsql:host=%database_host%;dbname=%database_name%"
+            - { db_username: "%database_user%", db_password: "%database_password%" }

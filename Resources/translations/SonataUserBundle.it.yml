@@ -1,0 +1,9 @@
+# Cogitoweb: missing translations from SonataUserBundle
+field.label_roles_editable: Ruoli
+filter.label_groups:        Gruppi
+form.label_firstname:       Nome
+form.label_lastname:        Cognome
+list.label_groups:          Gruppi
+
+# Cogitoweb: translation used in "Exit impersonating mode" button is overridden and shortened to save horizontal space
+switch_user_exit:           Non impersonare

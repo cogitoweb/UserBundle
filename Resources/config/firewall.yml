@@ -1,0 +1,41 @@
+# Cogitoweb: configuration based on https://sonata-project.org/bundles/user/master/doc/reference/installation.html tutorial
+security:
+    firewalls:
+        # Cogitoweb: custom firewall for the admin area of the URL
+        admin:
+            pattern:                 /admin(.*)
+            context:                 user
+            form_login:
+                provider:            fos_userbundle
+                login_path:          /admin/login
+                use_forward:         false
+                check_path:          /admin/login_check
+                failure_path:        null
+                default_target_path: sonata_admin_dashboard
+            logout:
+                path:                /admin/logout
+                target:              /admin/login
+            anonymous:               true
+            switch_user:
+                provider: fos_userbundle
+
+            remember_me:
+                secret: "%secret%"
+                path:   sonata_user_admin_security_login
+
+        # Cogitoweb: by default there are no pages outside of Admin, therefore it is not necessary to configure the firewall for this area
+        # default login area for standard users
+
+        # This firewall is used to handle the public login area
+        # This part is handled by the FOS User Bundle
+#        main:
+#            pattern:             .*
+#            context:             user
+#            form_login:
+#                provider:       fos_userbundle
+#                login_path:     /login
+#                use_forward:    false
+#                check_path:     /login_check
+#                failure_path:   null
+#            logout:             true
+#            anonymous:          true
