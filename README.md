@@ -21,7 +21,7 @@ Please note that the following options are **disabled**:
 
 For further informations, please refer to [SonataUserBundle documentation][1].
 
-The pourpose of this bundle is to reduce the effort to configure SonataUserBundle by scratch everytime a new project is started.
+The pourpose of this bundle is to reduce the effort to configure SonataUserBundle from scratch everytime a new project is started.
 The aim is reached by gathering common settings in fewer (2) configuration files, so that the developer just have to import such files
 in main configs to have the system ready.
 
@@ -30,15 +30,17 @@ in main configs to have the system ready.
 Add the repository in `repositories` section of your project's `composer.json`,
 so that composer becomes aware of CogitowebUserBundle existance
 
+```json
+    ...
+    "repositories": [
         ...
-        "repositories": [
-            ...
-            {
-                "type": "vcs",
-                "url": "https://github.com/cogitoweb/UserBundle"
-            }
-        ],
-        ...
+        {
+            "type": "vcs",
+            "url": "https://github.com/cogitoweb/UserBundle"
+        }
+    ],
+    ...
+```
 
 And install the package
 
@@ -48,27 +50,35 @@ And install the package
 
 Like all other bundles, to enable CogitowebUserBundle add it in `app/AppKernel.php`, along with its dependencies
 
-    ...
-    new FOS\UserBundle\FOSUserBundle(),
-    new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
-	new Cogitoweb\UserBundle\CogitowebUserBundle(),
-    ...
+```php
+            ...
+            new FOS\UserBundle\FOSUserBundle(),
+            new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
+	        new Cogitoweb\UserBundle\CogitowebUserBundle(),
+            ...
+```
 
 ## Configuration
 
 As stated in the introduction of this document, CogitowebUserBundle `config.yml` must be imported in `app/config/config.yml` main configuration
 
-    imports:
-        ...
-        - { resource: "@CogitowebUserBundle/Resources/config/config.yml" }
+```yaml
+imports:
+    ...
+    - { resource: "@CogitowebUserBundle/Resources/config/config.yml" }
+```
 
 Unfortunately, due to adverse parameters merging, it is necessary to comment the session handler ID parameter in the same file
 
-    #        handler_id:  ~
+```yaml
+#        handler_id:  ~
+```
 
 Or set it to
 
-            handler_id: session.handler.pdo
+```yaml
+        handler_id: session.handler.pdo
+```
 
 If you do not follow the previous step, the PDO session handling feature enabled by CogitowebUserBundle will not be available
 because the parameter imported from the bundle is overridden with ~ (null).
@@ -81,30 +91,36 @@ because the exception
 
 is thrown otherwise. For further informations, please refer to [this][2] GitHub page.
 
-        firewalls:
-            dev:
-                ...
+```yaml
+    firewalls:
+        dev:
+            ...
 
-            # Cogitoweb: placeholder for CogitowebUserBundle admin firewall
-            admin:
+        # Cogitoweb: placeholder for CogitowebUserBundle admin firewall
+        admin:
 
-            main:
-                ...
+        main:
+            ...
+```
 
 ## Routing
 
 Like configuration, also routing `routing.yml` file must be imported in `app/config/routing.yml`
 
-    ...
-    cogitoweb_user:
-        resource: "@CogitowebUserBundle/Resources/config/routing.yml"
+```yaml
+...
+cogitoweb_user:
+    resource: "@CogitowebUserBundle/Resources/config/routing.yml"
+```
 
 ## Clear cache and update database
 
 System is almost ready. Just perform a clear cache and update database to match the entities
 
+```
     $ php app/console cache:clear
     $ php app/console doctrine:schema:update --force
+```
 
 Beware that PdoSessionHandler does not use Doctrine ORM, therefore the *sessions* table it needs was not created with the previous command.
 You can find ready-to-run SQL scripts in `vendor/cogitoweb/user-bundle/data/sql/PdoSessionHandler/` suitable for most common DBMS distributions.
