@@ -2,7 +2,8 @@
 
 ## Introduction
 
-CogitowebUserBundle is a plug and play SonataUserBundle extension with the following setup:
+CogitowebUserBundle is a plug and play SonataUserBundle extension with the
+following setup:
 
 * Intended for being used with PostgreSQL, but config can be edited easily
 * Extends FOSUserBundle
@@ -13,7 +14,7 @@ CogitowebUserBundle is a plug and play SonataUserBundle extension with the follo
 * User's profile dashboard is not configured (yet)
 * PdoSessionHandler
 
-Please note that the following options are **disabled**:
+Notice that the following options are **disabled**:
 
 * Security ACL
 * Two-step validation
@@ -21,9 +22,11 @@ Please note that the following options are **disabled**:
 
 For further informations, please refer to [SonataUserBundle documentation][1].
 
-The pourpose of this bundle is to reduce the effort to configure SonataUserBundle from scratch everytime a new project is started.
-The aim is reached by gathering common settings in fewer (2) configuration files, so that the developer just have to import such files
-in main configs to have the system ready.
+The pourpose of this bundle is to reduce the effort to configure
+SonataUserBundle from scratch everytime a new project is started.
+The aim is reached by gathering common settings in fewer (2) configuration
+files, so that the developer just have to import such files in main configs to
+have the system ready.
 
 ## Installation
 
@@ -44,11 +47,14 @@ so that composer becomes aware of CogitowebUserBundle existance
 
 And install the package
 
-    $ composer require cogitoweb/user-bundle
+```
+$ composer require cogitoweb/user-bundle
+```
 
 ## Enable bundle
 
-Like all other bundles, to enable CogitowebUserBundle add it in `app/AppKernel.php`, along with its dependencies
+Like all other bundles, to enable CogitowebUserBundle add it in
+`app/AppKernel.php`, along with its dependencies
 
 ```php
             ...
@@ -60,7 +66,8 @@ Like all other bundles, to enable CogitowebUserBundle add it in `app/AppKernel.p
 
 ## Configuration
 
-As stated in the introduction of this document, CogitowebUserBundle `config.yml` must be imported in `app/config/config.yml` main configuration
+As stated in the introduction of this document, CogitowebUserBundle `config.yml`
+must be imported in `app/config/config.yml` main configuration
 
 ```yaml
 imports:
@@ -68,7 +75,8 @@ imports:
     - { resource: "@CogitowebUserBundle/Resources/config/config.yml" }
 ```
 
-Unfortunately, due to adverse parameters merging, it is necessary to comment the session handler ID parameter in the same file
+Unfortunately, due to adverse parameters merging,
+it is necessary to comment the session handler ID parameter in the same file
 
 ```yaml
 #        handler_id:  ~
@@ -80,16 +88,17 @@ Or set it to
         handler_id: session.handler.pdo
 ```
 
-If you do not follow the previous step, the PDO session handling feature enabled by CogitowebUserBundle will not be available
-because the parameter imported from the bundle is overridden with ~ (null).
+If you do not follow the previous step, the PDO session handling feature enabled
+by CogitowebUserBundle will not be available because the parameter imported from
+the bundle is overridden with ~ (null).
 
-Furthermore, it is necessary to add a placeholder in `app/config/security.yml` for CogitowebUserBundle *admin* firewall
-because the exception
+Furthermore, it is mandatory to add a placeholder in `app/config/security.yml`
+for CogitowebUserBundle *admin* firewall because the exception
 
 > InvalidConfigurationException in PrototypedArrayNode.php line 311:
 > You are not allowed to define new elements for path "security.firewalls". Please define all elements for this path in one config file.
 
-is thrown otherwise. For further informations, please refer to [this][2] GitHub page.
+is thrown otherwise. For further informations, refer to [this][2] GitHub page.
 
 ```yaml
     firewalls:
@@ -103,9 +112,34 @@ is thrown otherwise. For further informations, please refer to [this][2] GitHub 
             ...
 ```
 
+Still in `app/config/security.yml`, it is necessary to configure the basic
+access control paths. This setup cannot be done in CogitowebUserBundle because
+it would prevent developers from adding custom paths.
+In fact, if **access_control** is declared twice, the exception 
+
+> ForbiddenOverwriteException in BaseNode.php line 223:
+> Configuration path "security.access_control" cannot be overwritten. You have to define all options for this path, and any of its sub-paths in one configuration section.
+
+is thrown.
+
+```yaml
+    access_control:
+        # Admin login page needs to be accessed without credential
+        - { path: ^/admin/login$,       role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/logout$,      role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/resetting,    role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # Secured part of the site
+        # This config requires being logged for the whole site and having the admin role for the admin part.
+        # Change these rules to adapt them to your needs
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+```
+
 ## Routing
 
-Like configuration, also routing `routing.yml` file must be imported in `app/config/routing.yml`
+Like configuration, also routing `routing.yml` file must be imported in
+`app/config/routing.yml`
 
 ```yaml
 ...
@@ -115,33 +149,43 @@ cogitoweb_user:
 
 ## Clear cache and update database
 
-System is almost ready. Just perform a clear cache and update database to match the entities
+System is almost ready. Just perform a clear cache and update database to match
+the entities
 
 ```
-    $ php app/console cache:clear
-    $ php app/console doctrine:schema:update --force
+$ php app/console cache:clear
+$ php app/console doctrine:schema:update --force
 ```
 
-Beware that PdoSessionHandler does not use Doctrine ORM, therefore the *sessions* table it needs was not created with the previous command.
-You can find ready-to-run SQL scripts in `vendor/cogitoweb/user-bundle/data/sql/PdoSessionHandler/` suitable for most common DBMS distributions.
-Just execute the one that fits your database to have the *sessions* table available to PdoSessionHandler.
+Beware that PdoSessionHandler does not use Doctrine ORM,
+therefore the *sessions* table it needs was not created with the previous
+command.
+You can find ready-to-run SQL scripts in
+`vendor/cogitoweb/user-bundle/data/sql/PdoSessionHandler/`
+suitable for most common DBMS distributions.
+Just execute the one that fits your database to have the *sessions* table
+available to PdoSessionHandler.
 
 ## Conclusions
 
-At this point you should be prompted for username and password when visiting your [project's Admin][3].
+At this point you should be prompted for username and password when visiting
+your [project's Admin][3].
 
-Need to configure an account? Please, visit [FOSUserBundle command line tools][4] for further informations.
+Need to configure an account? Visit [FOSUserBundle command line tools][4] for
+further informations.
 
 ## Customization
 
-All the parameters set by CogitowebUserBundle can be easily overridden (i.e. to be project-specific) in `app/config/config.yml`.
+All the parameters set by CogitowebUserBundle can be easily overridden
+(i.e. to be project-specific) in `app/config/config.yml`.
 For example, if you want to use MySQL you can apply the following override
 
 <pre>
 	services.session.handler.pdo.arguments: [ "<b>mysql</b>:host=%database_host%;dbname=%database_name%", { db_username: "%database_user%", db_password: "%database_password%" } ]
 </pre>
 
-Please, refer to [SonataAdminBundle documentation][5] to edit front-end elements (images, stylesheets and javascripts) of login screen.
+Refer to [SonataAdminBundle documentation][5] to edit front-end elements
+(images, stylesheets and javascripts) of login screen.
 
 [1]: https://sonata-project.org/bundles/user/master/doc/index.html
 [2]: https://github.com/symfony/symfony/issues/16517
