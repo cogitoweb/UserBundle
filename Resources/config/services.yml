@@ -7,3 +7,8 @@ services:
         arguments: [ "@security.token_storage", "@router", "@translator" ]
         tags:
             - { name: kernel.event_subscriber }
+
+    cogitoweb.user.form.handler.change_password_form:
+        class:     Cogitoweb\UserBundle\Form\Handler\ChangePasswordFormHandler
+        arguments: [ "@fos_user.change_password.form", "@request", "@fos_user.user_manager" ]
+        scope:     request
