@@ -1,3 +1,9 @@
 services:
     cogitoweb.user.security.user_checker:
         class:     Cogitoweb\UserBundle\Security\UserChecker
+
+    cogitoweb.user.event_subscriber.credentials_expired:
+        class:     Cogitoweb\UserBundle\EventSubscriber\CredentialsExpiredSubscriber
+        arguments: [ "@security.token_storage", "@router", "@translator" ]
+        tags:
+            - { name: kernel.event_subscriber }
