@@ -10,5 +10,5 @@ services:
 
     cogitoweb.user.form.handler.change_password_form:
         class:     Cogitoweb\UserBundle\Form\Handler\ChangePasswordFormHandler
-        arguments: [ "@fos_user.change_password.form", "@request", "@fos_user.user_manager" ]
+        arguments: [ "@fos_user.change_password.form", "@request", "@fos_user.user_manager", "%cogitoweb_user.change_password.credentials_expire_at%" ]
         scope:     request

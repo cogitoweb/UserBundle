@@ -24,5 +24,7 @@ class CogitowebUserExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+		$container->setParameter('cogitoweb_user.change_password.credentials_expire_at', $config['change_password']['credentials_expire_at']);
     }
 }

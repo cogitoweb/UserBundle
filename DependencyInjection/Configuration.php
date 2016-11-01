@@ -23,7 +23,25 @@ class Configuration implements ConfigurationInterface
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
-		return $treeBuilder;
+
+		$rootNode
+			->children()
+				->arrayNode('change_password')
+				->addDefaultsIfNotSet()
+					->children()
+					->scalarNode('credentials_expire_at')
+						->info('Format suitable for PHP DateTime() class.')
+						->defaultNull()
+						->validate()
+							->ifTrue($this->DateTimeConstraint())
+							->thenInvalid('Format not suitable for PHP DateTime class.')
+						->end()
+					->end()
+				->end()
+			->end()
+		;
+
+        return $treeBuilder;
     }
 
 	/**
