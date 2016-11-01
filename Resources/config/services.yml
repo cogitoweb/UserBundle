@@ -1,0 +1,3 @@
+services:
+    cogitoweb.user.security.user_checker:
+        class:     Cogitoweb\UserBundle\Security\UserChecker

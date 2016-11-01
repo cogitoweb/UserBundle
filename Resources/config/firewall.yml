@@ -23,6 +23,8 @@ security:
                 secret: "%secret%"
                 path:   sonata_user_admin_security_login
 
+            user_checker: cogitoweb.user.security.user_checker
+
         # Cogitoweb: by default there are no pages outside of Admin, therefore it is not necessary to configure the firewall for this area
         # default login area for standard users
 
