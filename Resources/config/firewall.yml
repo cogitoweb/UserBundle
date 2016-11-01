@@ -4,7 +4,7 @@ security:
         # Cogitoweb: custom firewall for the admin area of the URL
         admin:
             pattern:                 /admin(.*)
-            context:                 user
+            context:                 admin
             form_login:
                 provider:            fos_userbundle
                 login_path:          /admin/login
