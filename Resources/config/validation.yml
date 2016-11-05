@@ -1,0 +1,5 @@
+# Add Cogitoweb NewUserPassword constraint to ChangePassword model used by FOSUserBundle in change password form
+FOS\UserBundle\Form\Model\ChangePassword:
+    properties:
+        new:
+            - Cogitoweb\UserBundle\Validator\Constraints\NewUserPassword: { message: cogitoweb_user.new_password.invalid }

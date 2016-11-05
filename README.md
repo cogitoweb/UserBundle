@@ -166,12 +166,32 @@ suitable for most common DBMS distributions.
 Just execute the one that fits your database to have the *sessions* table
 available to PdoSessionHandler.
 
+## Credentials expiry
+
+CogitowebUserBundle extends this feature provided by FOSUserBundle:
+it ignores the CredentialsExpiredException by overriding the [UserChecker][3]
+and allowing the user to authenticate, then the [CredentialsExpired subscriber][4]
+redirects (and locks) the user to change password page if its credentials are expired.
+After the credentials are updated, the overridden [ChangePasswordFormHandler][5]
+updates the `credentialsExpired` and `credentialsExpireAt` User properties.
+
+By default, User's `credentialsExpireAt` property is set to `null` so that, once updated,
+credentials will never expire. To change this behaviour, developer can change the
+`credentials_expire_at` parameter in `app/config/config.yml`
+
+```yaml
+...
+cogitoweb_user:
+    change_password:
+        credentials_expire_at: +1 month # Format suitable for PHP DateTime() class.
+```
+
 ## Conclusions
 
 At this point you should be prompted for username and password when visiting
-your [project's Admin][3].
+your [project's Admin][6].
 
-Need to configure an account? Visit [FOSUserBundle command line tools][4] for
+Need to configure an account? Visit [FOSUserBundle command line tools][7] for
 further informations.
 
 ## Customization
@@ -184,11 +204,14 @@ For example, if you want to use MySQL you can apply the following override
 	services.session.handler.pdo.arguments: [ "<b>mysql</b>:host=%database_host%;dbname=%database_name%", { db_username: "%database_user%", db_password: "%database_password%" } ]
 </pre>
 
-Refer to [SonataAdminBundle documentation][5] to edit front-end elements
+Refer to [SonataAdminBundle documentation][8] to edit front-end elements
 (images, stylesheets and javascripts) of login screen.
 
 [1]: https://sonata-project.org/bundles/user/master/doc/index.html
 [2]: https://github.com/symfony/symfony/issues/16517
-[3]: http://localhost:8000/admin
-[4]: https://symfony.com/doc/master/bundles/FOSUserBundle/command_line_tools.html
-[5]: https://sonata-project.org/bundles/admin/master/doc/index.html
+[3]: https://github.com/cogitoweb/UserBundle/tree/master/Security/UserChecker.php
+[4]: https://github.com/cogitoweb/UserBundle/tree/master/EventSubscriber/CredentialsExpiredSubscriber.php
+[5]: https://github.com/cogitoweb/UserBundle/tree/master/Form/Handler/ChangePasswordFormHandler.php
+[6]: http://localhost:8000/admin
+[7]: https://symfony.com/doc/master/bundles/FOSUserBundle/command_line_tools.html
+[8]: https://sonata-project.org/bundles/admin/master/doc/index.html

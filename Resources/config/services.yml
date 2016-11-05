@@ -1,0 +1,20 @@
+services:
+    cogitoweb.user.security.user_checker:
+        class:     Cogitoweb\UserBundle\Security\UserChecker
+
+    cogitoweb.user.event_subscriber.credentials_expired:
+        class:     Cogitoweb\UserBundle\EventSubscriber\CredentialsExpiredSubscriber
+        arguments: [ "@security.token_storage", "@router", "@translator" ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    cogitoweb.user.form.handler.change_password_form:
+        class:     Cogitoweb\UserBundle\Form\Handler\ChangePasswordFormHandler
+        arguments: [ "@fos_user.change_password.form", "@request", "@fos_user.user_manager", "%cogitoweb_user.change_password.credentials_expire_at%" ]
+        scope:     request
+
+    security.validator.new_user_password:
+        class:     Cogitoweb\UserBundle\Validator\Constraints\NewUserPasswordValidator
+        arguments: [ "@security.token_storage", "@security.encoder_factory" ]
+        tags:
+            - { name: validator.constraint_validator, alias: security.validator.new_user_password }
