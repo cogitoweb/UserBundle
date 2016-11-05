@@ -1,0 +1,3 @@
+cogitoweb_user:
+    new_password:
+        invalid: Questo valore dovrebbe essere diverso dalla password attuale dell'utente.

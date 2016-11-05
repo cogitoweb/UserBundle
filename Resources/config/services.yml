@@ -12,3 +12,9 @@ services:
         class:     Cogitoweb\UserBundle\Form\Handler\ChangePasswordFormHandler
         arguments: [ "@fos_user.change_password.form", "@request", "@fos_user.user_manager", "%cogitoweb_user.change_password.credentials_expire_at%" ]
         scope:     request
+
+    security.validator.new_user_password:
+        class:     Cogitoweb\UserBundle\Validator\Constraints\NewUserPasswordValidator
+        arguments: [ "@security.token_storage", "@security.encoder_factory" ]
+        tags:
+            - { name: validator.constraint_validator, alias: security.validator.new_user_password }
