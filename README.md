@@ -58,6 +58,10 @@ Like all other bundles, to enable CogitowebUserBundle add it in
 
 ```php
             ...
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+			new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\BlockBundle\SonataBlockBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
 	        new Cogitoweb\UserBundle\CogitowebUserBundle(),
