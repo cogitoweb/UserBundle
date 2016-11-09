@@ -14,6 +14,7 @@ sonata_user:
         route: sonata_admin_dashboard
 
 sonata_block:
+    default_contexts: [ admin ]
     blocks:
         sonata.user.block.menu:    # used to display the menu in profile pages
         sonata.user.block.account: # used to display menu option (login option)
