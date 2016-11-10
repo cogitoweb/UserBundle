@@ -1,0 +1,4 @@
+fos_user:
+    user_class: Application\Cogitoweb\UserBundle\Entity\User
+    group:
+        group_class: Application\Cogitoweb\UserBundle\Entity\Group

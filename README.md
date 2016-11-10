@@ -151,6 +151,29 @@ cogitoweb_user:
     resource: "@CogitowebUserBundle/Resources/config/routing.yml"
 ```
 
+## Generate entities
+
+At this point the bundle is working, but `User` and `Group` entities must be generated in order to use it.
+This task can be easily performed with EasyExtends. The following command will automatically create the entities mentioned above
+in `src/Application/Cogitoweb/UserBundle/` directory
+
+```
+$ php app/console sonata:easy-extends:generate CogitowebUserBundle -d src/
+```
+
+Mapping informations of generated entities are stored in XML format in `src/Application/Cogitoweb/UserBundle/Resources/config/doctrine/`.
+These mappings can be converted to another notation (annotations or YAML, i.e.)
+and `src/Application/Cogitoweb/UserBundle/Resources/config/doctrine/` folder deleted.
+
+Update FOSUserBundle configuration to use the new entities. Import the configuration file made available by CogitowebUserBundle
+for this purpose in `app/config/config.yml`
+
+```yaml
+imports:
+    ...
+    - { resource: "@CogitowebUserBundle/Resources/config/config_extended_entities.yml" }
+```
+
 ## Clear cache and update database
 
 System is almost ready. Just perform a clear cache and update database to match

@@ -7,9 +7,6 @@ sonata_user:
     # Cogitoweb: disable security ACL
 #    security_acl: true
     manager_type: orm # can be orm or mongodb
-    class:
-        user:  Cogitoweb\UserBundle\Entity\User
-        group: Cogitoweb\UserBundle\Entity\Group
     impersonating:
         route: sonata_admin_dashboard
 
@@ -23,9 +20,9 @@ sonata_block:
 fos_user:
     db_driver:     orm # can be orm or odm
     firewall_name: admin
-    user_class:    Cogitoweb\UserBundle\Entity\User
+    user_class:    Cogitoweb\UserBundle\Entity\BaseUser
     group:
-        group_class:   Cogitoweb\UserBundle\Entity\Group
+        group_class:   Cogitoweb\UserBundle\Entity\BaseGroup
         group_manager: sonata.user.orm.group_manager # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
     service:
         user_manager:  sonata.user.orm.user_manager  # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
