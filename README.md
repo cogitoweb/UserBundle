@@ -174,6 +174,15 @@ imports:
     - { resource: "@CogitowebUserBundle/Resources/config/config_extended_entities.yml" }
 ```
 
+Register the generated bundle in `app/AppKernel.php`
+
+```php
+            ...
+	        new Application\Cogitoweb\UserBundle\ApplicationCogitowebUserBundle(),
+            ...
+```
+
+
 ## Clear cache and update database
 
 System is almost ready. Just perform a clear cache and update database to match
