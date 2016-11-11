@@ -7,6 +7,9 @@ sonata_user:
     # Cogitoweb: disable security ACL
 #    security_acl: true
     manager_type: orm # can be orm or mongodb
+    class:
+        user:  Cogitoweb\UserBundle\Entity\BaseUser
+        group: Cogitoweb\UserBundle\Entity\BaseGroup
     impersonating:
         route: sonata_admin_dashboard
 

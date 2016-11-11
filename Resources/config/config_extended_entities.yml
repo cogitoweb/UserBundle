@@ -1,3 +1,8 @@
+sonata_user:
+    class:
+        user:  Application\Cogitoweb\UserBundle\Entity\User
+        group: Application\Cogitoweb\UserBundle\Entity\Group
+
 fos_user:
     user_class: Application\Cogitoweb\UserBundle\Entity\User
     group:
