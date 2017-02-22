@@ -111,7 +111,7 @@ class CredentialsExpiredSubscriber implements EventSubscriberInterface
 		}
 
 		// Avoid redirect loop
-		if ($this->getUrl() === $event->getRequest()->getRequestUri()) {
+		if (false !== strpos($event->getRequest()->getRequestUri(), 'change-password')) {
 			return;
 		}
 
