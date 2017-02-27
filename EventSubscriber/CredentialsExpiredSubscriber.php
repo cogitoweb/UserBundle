@@ -115,9 +115,19 @@ class CredentialsExpiredSubscriber implements EventSubscriberInterface
 			return;
 		}
 
+		$url = $this->getUrl();
+
+		// If it is not Admin, it is API
+		if (false === strpos('admin', $event->getRequest()->getPathInfo())) {
+			// Fix route and redir user
+			$url = str_replace('/admin', '/#', $url);
+			$event->setResponse(new RedirectResponse($url));
+			return;
+		}
+
 		// Add error flash and redirect user
 		$event->getRequest()->getSession()->getFlashBag()->add('danger', $this->getMessage());
-		$event->setResponse(new RedirectResponse($this->getUrl()));
+		$event->setResponse(new RedirectResponse($url));
 	}
 
 	/**
