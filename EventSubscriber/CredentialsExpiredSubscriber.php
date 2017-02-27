@@ -115,6 +115,16 @@ class CredentialsExpiredSubscriber implements EventSubscriberInterface
 			return;
 		}
 
+		// If it is not Admin, it is API
+		if (false === strpos('admin', $event->getRequest()->getPathInfo())) {
+			$response = ['code' => 403, 'message' => 'Credentials expired'];
+			$response = json_encode ($response);
+			$response = new Response($response, 403);
+
+			$event->setResponse($response);
+			return;
+		}
+
 		// Add error flash and redirect user
 		$event->getRequest()->getSession()->getFlashBag()->add('danger', $this->getMessage());
 		$event->setResponse(new RedirectResponse($this->getUrl()));
