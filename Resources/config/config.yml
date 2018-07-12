@@ -33,9 +33,9 @@ fos_user:
         user_manager:  sonata.user.orm.user_manager  # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
 
     # Cogitoweb: use custom form handler
-    change_password:
-        form:
-            handler: cogitoweb.user.form.handler.change_password_form
+#    change_password:
+#        form:
+#            handler: cogitoweb.user.form.handler.change_password_form
 
 doctrine:
     dbal:
